@@ -14,7 +14,9 @@ class DebugMode(BaseMode):
     def reply(self):
         s = self.cmd[0]
         if s == "show":
-            return Record.query.all()
+            return "{}".format(Record.query.all())
+        else:
+            return "Action not found ({})".format(" ".join(self.cmd))
 
 class AddMode(BaseMode):
     def reply(self):
@@ -35,6 +37,7 @@ class AntiFruitFruad(object):
         print("Show: {}".format(text))
 
     def processText(self, text):
+        text = text.lower()
         self.showText(text)
         dt = datetime.utcnow()
         tzutc_8 = timezone(timedelta(hours=8))
