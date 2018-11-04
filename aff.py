@@ -1,5 +1,6 @@
 from flask import Flask, request, abort
 from datetime import datetime, timezone, timedelta
+from models import Record
 
 
 class AntiFruitFruad(object):
@@ -12,18 +13,20 @@ class AntiFruitFruad(object):
 
     def processText(self, text):
         self.showText(text)
-        # dt = datetime.utcnow()
-        # tzutc_8 = timezone(timedelta(hours=8))
-        # local_dt = dt.astimezone(tzutc_8)
-        # r = Record(
-        #     time=local_dt,
-        #     loc=text, 
-        #     price=123, 
-        #     unit="斤")
-        # self.db.session.add(r)
-        # self.db.session.commit()
+        self._displayRecord()
+        dt = datetime.utcnow()
+        tzutc_8 = timezone(timedelta(hours=8))
+        local_dt = dt.astimezone(tzutc_8)
+        r = Record(
+            time=local_dt,
+            loc=text, 
+            price=123, 
+            unit="斤")
+        self.db.session.add(r)
+        self.db.session.commit()
+        self._displayRecord()
         ret = "{} done".format(text)
         return ret
 
-    # def _displayRecord(self):
-    #     print(Record.query.all())
+    def _displayRecord(self):
+        print(Record.query.all())

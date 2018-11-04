@@ -13,10 +13,7 @@ from linebot.models import *
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-
 db = SQLAlchemy(app)
-from models import Record
-
 
 from aff import AntiFruitFruad
 aff_handler = AntiFruitFruad(db)
