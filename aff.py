@@ -38,7 +38,7 @@ class AntiFruitFruad(object):
 
     def debug(self, actions):
         if len(actions):
-            a = actions[0]
+            a = actions[0].strip()
             action = {
                 "show": self._displayRecord,
                 "clear": self._clear,
@@ -60,13 +60,18 @@ class AntiFruitFruad(object):
                 )
             self.db.session.add(r)
             self.db.session.commit()
-            return "[success][id:{}] add item {} ({}/{}) at {} when {}".format(
-                r.id, 
-                r.name, 
-                r.price, 
-                r.unit, 
-                r.loc, 
-                r.time.strftime("%Y-%m-%d %H:%M"))
+            return "{} {}({}/{})/{} [id:{}]".format(r.time.strftime("%Y-%m-%d %H:%M"), r.name, r.price, r.unit, r.loc, r.id, )
+        else:
+            return self._usage()
+
+    def show(self, actions):
+        if len(actions):
+            a = actions[0].strip()
+            action = {
+                "name": self._select_name,
+            }
+            ret = action.get(a, self._usage())()
+            return ret
         else:
             return self._usage()
 
@@ -77,8 +82,9 @@ class AntiFruitFruad(object):
         commands = {
             "debug": self.debug,
             "add": self.add,
+            "show": self.show,
         }
-        ret = commands.get(cmd)(actions)
+        ret = commands.get(cmd.strip())(actions)
         return ret
 
     def _displayRecord(self):
@@ -91,6 +97,13 @@ class AntiFruitFruad(object):
 
     def _test(self):
         return "[develop]\n123456789A123456789B123456789C123456789D123456789E"
+
+    def _select_name(self):
+        results = Record.query.with_entities(Record.name)
+        for i in results:
+            print(i)
+        results = set(map(lambda r: r.name, results))
+        return "\n".join(results)
 
     def showText(self, text):
         print("Show: {}".format(text))
