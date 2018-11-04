@@ -31,7 +31,11 @@ class AntiFruitFruad(object):
     def processText(self, text):
         self._displayRecord()
         self.showText(text)
-        r = Record(datetime.now(), text, 123, "斤")
+        r = Record(
+            time=datetime.now(), 
+            loc=text, 
+            price=123, 
+            unit="斤")
         self.db.session.add(r)
         self.db.session.commit()
         ret = ""
