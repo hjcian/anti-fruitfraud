@@ -1,8 +1,7 @@
 from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db = SQLAlchemy()
 
 class Record(db.Model):
@@ -17,12 +16,27 @@ class Record(db.Model):
 
 def create_app():
     app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
     db.init_app(app)
-    return app
+    return app, db
 
 class AntiFruitFruad(object):
-    def __init__(self):
-        pass
+    def __init__(self, db):
+        self.db = db
+        self.db.create_all()
 
     def showText(self, text):
         print("Show: {}".format(text))
+
+    def processText(self, text):
+        self._displayRecord()
+        self.showText(text)
+        r = Record(datetime.now(), text, 123, "斤")
+        self.db.session.add(r)
+        self.db.session.commit()
+        ret = ""
+        self._displayRecord()
+        return ret
+
+    def _displayRecord(self):
+        print(Record.query.all())

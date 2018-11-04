@@ -12,9 +12,8 @@ from linebot.models import *
 from aff import create_app
 from aff import AntiFruitFruad
 
-app = create_app()
-aff_handler = AntiFruitFruad()
-
+app, db = create_app()
+aff_handler = AntiFruitFruad(db)
 
 # Channel Access Token
 line_bot_api = LineBotApi('rYeJ0hEeOWbGCUHgkm04LUUz9LkHGKxHFbKl/6qFpLSvcnBwAPwNvGIpkMw2FcOlk4/8fVpAe/yNsPEmysEpDb0wyAxp1M+GCSIcBCZG/lFkPbRsus2JvF454W8hUSbO1nEc9ar8fxfZGQJqknUMaAdB04t89/1O/w1cDnyilFU=')
@@ -40,10 +39,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     received = event.message.text
-    aff_handler.showText(received)
-    # pass text to my program
-    # take result back from my program
-    message = TextSendMessage(text=received)
+    ret = aff_handler.process(received)
+    message = TextSendMessage(text=ret)
     line_bot_api.reply_message(event.reply_token, message)
 
 import os
