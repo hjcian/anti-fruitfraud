@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 db = SQLAlchemy()
 
@@ -31,8 +31,11 @@ class AntiFruitFruad(object):
     def processText(self, text):
         self._displayRecord()
         self.showText(text)
+        dt = datetime.utcnow()
+        tzutc_8 = timezone(timedelta(hours=8))
+        local_dt = dt.astimezone(tzutc_8)
         r = Record(
-            time=datetime.now(), 
+            time=local_dt, 
             loc=text, 
             price=123, 
             unit="斤")
