@@ -12,8 +12,8 @@ class AntiFruitFruad(object):
         print("Show: {}".format(text))
 
     def processText(self, text):
-        self.showText(text)
         self._displayRecord()
+        self.showText(text)
         dt = datetime.utcnow()
         tzutc_8 = timezone(timedelta(hours=8))
         local_dt = dt.astimezone(tzutc_8)
