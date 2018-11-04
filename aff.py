@@ -6,10 +6,10 @@ class AntiFruitFruad(object):
     def __init__(self, db):
         self.db = db
         self.db.create_all()
-        self.locations = set()
-        self.items = set()
-        # self.locations = set(map(lambda r: r.name, Record.query.with_entities(Record.loc)))
-        # self.items = set(map(lambda r: r.name, Record.query.with_entities(Record.name)))
+        # self.locations = set()
+        # self.items = set()
+        self.locations = set(map(lambda r: r.loc, Record.query.with_entities(Record.loc)))
+        self.items = set(map(lambda r: r.name, Record.query.with_entities(Record.name)))
 
 
     def _usage(self):
@@ -57,7 +57,7 @@ class AntiFruitFruad(object):
             return self._usage()
 
     def processText(self, text):
-        self._init()
+        # self._init()
         text = text.lower()
         self.showText(text)
         key, *actions = text.split(" ")
@@ -102,7 +102,7 @@ class AntiFruitFruad(object):
 
     def _init(self):
         if not self.locations:
-            self.locations = set(map(lambda r: r.name, Record.query.with_entities(Record.loc)))
+            self.locations = set(map(lambda r: r.loc, Record.query.with_entities(Record.loc)))
         if not self.items:
             self.items = set(map(lambda r: r.name, Record.query.with_entities(Record.name)))
 
