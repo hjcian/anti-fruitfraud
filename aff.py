@@ -23,7 +23,7 @@ class AntiFruitFruad(object):
                 "clear": self._clear,
                 "test": self._test,
             }
-            ret = action.get(a, self._usage())()
+            ret = action.get(a, self._usage)()
             return ret
         else:
             return self._usage()
@@ -51,7 +51,7 @@ class AntiFruitFruad(object):
             action = {
                 "name": self._select_name,
             }
-            ret = action.get(a, self._usage())()
+            ret = action.get(a, self._usage)()
             return ret
         else:
             return self._usage()
@@ -72,7 +72,7 @@ class AntiFruitFruad(object):
                 "add": self.add,
                 "show": self.show,
             }
-            ret = commands.get(key, self._usage())(actions)
+            ret = commands.get(key, lambda dump: self._usage())(actions)
             return ret
 
     def _displayRecord(self):
