@@ -3,6 +3,29 @@ from datetime import datetime, timezone, timedelta
 from models import Record
 
 
+class BaseMode(object):
+    def __init__(self, command):
+        self.cmd = command
+
+    def reply(self):
+        return "Command not found ({})".format(self.cmd)
+
+class DebugMode(BaseMode):
+    def reply(self):
+        s = self.cmd[0]
+        if s == "show":
+            return Record.query.all()
+
+class AddMode(BaseMode):
+    def reply(self):
+        pass
+
+def processText(text):
+    key, *rest = text.split(" ")
+    return {
+        "debug": DebugMode(rest)
+    }.get(key, BaseMode(text)).reply()
+
 class AntiFruitFruad(object):
     def __init__(self, db):
         self.db = db
@@ -12,7 +35,6 @@ class AntiFruitFruad(object):
         print("Show: {}".format(text))
 
     def processText(self, text):
-        self._displayRecord()
         self.showText(text)
         dt = datetime.utcnow()
         tzutc_8 = timezone(timedelta(hours=8))
@@ -24,8 +46,8 @@ class AntiFruitFruad(object):
             unit="斤")
         self.db.session.add(r)
         self.db.session.commit()
-        self._displayRecord()
-        ret = "{} done".format(text)
+        # ret = "{} done".format(text)
+        ret = processText(text)
         return ret
 
     def _displayRecord(self):
