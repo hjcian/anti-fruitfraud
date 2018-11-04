@@ -5,8 +5,9 @@ class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.DateTime(timezone=True), unique=False, nullable=False)
     loc = db.Column(db.String(32), unique=False, nullable=False)
+    name = db.Column(db.String(16), unique=False, nullable=False)
     price = db.Column(db.Integer, unique=False, nullable=False)
     unit = db.Column(db.String(16), unique=False, nullable=False)
 
     def __repr__(self):
-        return "<Record: {} {} {} {}>".format(self.time, self.loc, self.price, self.unit)
+        return "<Record: {} {} {} {} {}>".format(self.time, self.loc, self.name, self.price, self.unit)
