@@ -72,7 +72,7 @@ class AntiFruitFruad(object):
                 "add": self.add,
                 "show": self.show,
             }
-            ret = commands.get(key)(actions)
+            ret = commands.get(key, self._usage())(actions)
             return ret
 
     def _displayRecord(self):
