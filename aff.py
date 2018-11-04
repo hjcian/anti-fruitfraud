@@ -92,7 +92,7 @@ class AntiFruitFruad(object):
         return "\n".join(results)
 
     def _select_by_name(self, name):
-        results = Record.query(Record).filter(Record.name==name)
+        results = Record.query.with_entities(Record).filter(Record.name==name)
         for i in results:
             print(i)
         return "\n".join(map(lambda r: "{} {} ({}/{})".format(r.loc, r.name, r.price, r.unit), results))
