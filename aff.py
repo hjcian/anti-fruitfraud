@@ -56,7 +56,7 @@ class AntiFruitFruad(object):
                 loc=actions[0],
                 name=actions[1], 
                 price=actions[2], 
-                unit=actions[3] if len(actions) > 3 else "個"
+                unit=actions[3] if len(actions) > 3 else "{}".format("個")
                 )
             self.db.session.add(r)
             self.db.session.commit()
