@@ -38,7 +38,7 @@ class AntiFruitFruad(object):
             unit="斤")
         self.db.session.add(r)
         self.db.session.commit()
-        ret = ""
+        ret = "{} done".format(text)
         self._displayRecord()
         return ret
 
