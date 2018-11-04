@@ -2,36 +2,12 @@ from flask import Flask, request, abort
 from datetime import datetime, timezone, timedelta
 from models import Record
 
-
-class BaseMode(object):
-    def __init__(self, command):
-        self.cmd = command
-
-    def reply(self):
-        return "Command not found ({})".format(self.cmd)
-
-class DebugMode(BaseMode):
-    def reply(self):
-        s = self.cmd[0]
-        if s == "show":
-            return "{}".format(Record.query.all())
-        else:
-            return "Action not found ({})".format(" ".join(self.cmd))
-
-class AddMode(BaseMode):
-    def reply(self):
-        pass
-
-def processText(text):
-    key, *rest = text.split(" ")
-    return {
-        "debug": DebugMode(rest)
-    }.get(key, BaseMode(text)).reply()
-
 class AntiFruitFruad(object):
     def __init__(self, db):
         self.db = db
         self.db.create_all()
+        self.locations = set(map(lambda r: r.name, Record.query.with_entities(Record.loc)))
+        self.items = set(map(lambda r: r.name, Record.query.with_entities(Record.name)))
 
     def _usage(self):
         return "Show usage"
@@ -60,6 +36,8 @@ class AntiFruitFruad(object):
                 )
             self.db.session.add(r)
             self.db.session.commit()
+            self.locations.add(actions[0])
+            self.items.add(actions[1])
             return "{} {}({}/{})/{} [id:{}]".format(r.time.strftime("%Y-%m-%d %H:%M"), r.name, r.price, r.unit, r.loc, r.id, )
         else:
             return self._usage()
@@ -78,14 +56,20 @@ class AntiFruitFruad(object):
     def processText(self, text):
         text = text.lower()
         self.showText(text)
-        cmd, *actions = text.split(" ")
-        commands = {
-            "debug": self.debug,
-            "add": self.add,
-            "show": self.show,
-        }
-        ret = commands.get(cmd.strip())(actions)
-        return ret
+        key, *actions = text.split(" ")
+        key = key.strip()
+        if key in self.items:
+            # directly search item
+            ret = self._select_by_name(key)
+            return ret
+        else:
+            commands = {
+                "debug": self.debug,
+                "add": self.add,
+                "show": self.show,
+            }
+            ret = commands.get(key)(actions)
+            return ret
 
     def _displayRecord(self):
         return "[develop]\n{}".format(Record.query.all())
@@ -100,9 +84,13 @@ class AntiFruitFruad(object):
 
     def _select_name(self):
         results = Record.query.with_entities(Record.name)
+        results = set(map(lambda r: r.name, results))
+        return "\n".join(results)
+
+    def _select_by_name(self, name):
+        results = Record.query.with_entities(Record.name).filter(Record.name==name)
         for i in results:
             print(i)
-        results = set(map(lambda r: r.name, results))
         return "\n".join(results)
 
     def showText(self, text):
