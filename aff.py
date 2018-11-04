@@ -92,10 +92,10 @@ class AntiFruitFruad(object):
         return "\n".join(results)
 
     def _select_by_name(self, name):
-        results = Record.query.with_entities(Record).filter(Record.name==name)
+        results = Record.query.with_entities(Record).filter(Record.name==name).order_by(Record.time.desc()).slice(0, 5)
         for i in results:
             print(i)
-        return "\n".join(map(lambda r: "{} {} ({}/{})".format(r.loc, r.name, r.price, r.unit), results))
+        return "\n".join(map(lambda r: "[{}] {} {} ({}/{})".format(r.time, r.loc, r.name, r.price, r.unit), results))
 
     def showText(self, text):
         print("Received: {}".format(text))
