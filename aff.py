@@ -1,17 +1,28 @@
-from app import app
+from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
 
+app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
-class User(db.Model):
+class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    time = db.Column(db.DateTime(timezone=True), unique=False, nullable=False)
+    loc = db.Column(db.String(32), unique=False, nullable=False)
+    price = db.Column(db.Integer, unique=False, nullable=False)
+    unit = db.Column(db.String(16), unique=False, nullable=False)
 
     def __repr__(self):
-        return "<User {}> {}".format(self.username, self.email)
+        return "<Record: {} {} {} {}>".format(self.time, self.loc, self.price, self.unit)
 
+def create_app():
+    app = Flask(__name__)
+    db.init_app(app)
+    return app
 
 class AntiFruitFruad(object):
-    pass
+    def __init__(self):
+        pass
+
+    def showText(self, text):
+        print("Show: {}".format(text))
