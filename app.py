@@ -13,6 +13,7 @@ from aff import create_app
 from aff import AntiFruitFruad
 
 app, db = create_app()
+app.app_context().push()
 aff_handler = AntiFruitFruad(db)
 
 # Channel Access Token
