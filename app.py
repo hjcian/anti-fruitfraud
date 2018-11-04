@@ -1,5 +1,4 @@
 from flask import Flask, request, abort
-from flask.ext.sqlalchemy import SQLAlchemy
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -10,6 +9,9 @@ from linebot.exceptions import (
 from linebot.models import *
 
 app = Flask(__name__)
+
+from aff import AntiFruitFruad
+
 
 # Channel Access Token
 line_bot_api = LineBotApi('rYeJ0hEeOWbGCUHgkm04LUUz9LkHGKxHFbKl/6qFpLSvcnBwAPwNvGIpkMw2FcOlk4/8fVpAe/yNsPEmysEpDb0wyAxp1M+GCSIcBCZG/lFkPbRsus2JvF454W8hUSbO1nEc9ar8fxfZGQJqknUMaAdB04t89/1O/w1cDnyilFU=')
@@ -31,13 +33,13 @@ def callback():
         abort(400)
     return 'OK'
 
-    
-
 # main function
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     received = event.message.text
     print("received: {}".format(received))
+    # pass text to my program
+    # take result back from my program
     message = TextSendMessage(text=received)
     print("message obj: {}".format(message))
     line_bot_api.reply_message(event.reply_token, message)
