@@ -1,5 +1,6 @@
 from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -9,11 +10,15 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 
-from aff import create_app
-from aff import AntiFruitFruad
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
-app, db = create_app()
-app.app_context().push()
+db = SQLAlchemy(app)
+from models import Record
+
+
+from aff import AntiFruitFruad
 aff_handler = AntiFruitFruad(db)
 
 # Channel Access Token
