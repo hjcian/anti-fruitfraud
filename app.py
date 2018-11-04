@@ -13,7 +13,7 @@ from aff import create_app
 from aff import AntiFruitFruad
 
 app = create_app()
-
+aff_handler = AntiFruitFruad()
 
 
 # Channel Access Token
@@ -40,7 +40,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     received = event.message.text
-    AntiFruitFruad.showText(received)
+    aff_handler.showText(received)
     # pass text to my program
     # take result back from my program
     message = TextSendMessage(text=received)
