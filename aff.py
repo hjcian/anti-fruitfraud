@@ -25,7 +25,7 @@ class AntiFruitFruad(object):
         elif key in self.locations: # select location
             ret = self._select_by_col(Record.loc, key)
         else:
-            ret = self._usage("你輸入的\"{}\"都沒找到捏".format(key))
+            ret = self._usage("沒找到\"{}\"可以幹嘛捏".format(key))
         return ret
 
     def validateWords(self, words):
@@ -87,7 +87,7 @@ class AntiFruitFruad(object):
     
     def _usage(self, msg=None):
         ret = msg + "\n" if msg else ""
-        ret += "(可以輸入 help 查看詳細使用說明)"
+        ret += "(你可以輸入 help 查看詳細使用說明)"
         return ret
 
     def _help(self, msg=None):
