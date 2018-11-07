@@ -81,9 +81,9 @@ class AntiFruitFruad(object):
     def _select_by_col(self, col, value, limit=5):
         results = Record.query.with_entities(Record).filter(col==value).order_by(Record.time.desc()).slice(0, limit)
         if col is Record.name:
-            return "\n".join(map(lambda r: "[{}] {} ({}/{}) [id:{}]".format(r.time.strftime("%Y-%m-%d %H:%M"), r.loc, r.price, r.unit, r.id), results))
+            return "\n".join(map(lambda r: "[{}] {} ({}/{})".format(r.time.strftime("%m-%d %H:%M"), r.loc, r.price, r.unit), results))
         elif col is Record.loc:
-            return "\n".join(map(lambda r: "[{}] {} ({}/{}) [id:{}]".format(r.time.strftime("%Y-%m-%d %H:%M"), r.name, r.price, r.unit, r.id), results))
+            return "\n".join(map(lambda r: "[{}] {} ({}/{})".format(r.time.strftime("%m-%d %H:%M"), r.name, r.price, r.unit), results))
     
     def _usage(self, msg=None):
         ret = msg + "\n" if msg else ""
