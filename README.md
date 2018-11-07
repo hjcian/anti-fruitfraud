@@ -8,7 +8,7 @@
 # 如何開始？
 1. 首先你會需要用到以下資訊，學會用自己的 LINE 帳號架設一個頻道
     ### ***Line Bot 教學***
-    1. 使用[姚韋辰](https://yaoandy107.github.io/line-bot-tutorial/)的教程使用 Python LINE Bot SDK 及 HEROKU 平台架設一個簡單的回話機器人
+    - 使用[姚韋辰](https://yaoandy107.github.io/line-bot-tutorial/)的教程使用 Python LINE Bot SDK 及 HEROKU 平台架設一個簡單的回話機器人
 
     ### ***如何使用 HEROKU 提供的 postgresql 資料庫***
     - [provisioning-heroku-postgres](https://devcenter.heroku.com/articles/heroku-postgresql#provisioning-heroku-postgres)
